@@ -1,0 +1,1061 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #121212;
+    color: white;
+}
+
+.container {
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 30px;
+    color: #f0f0f0;
+}
+
+/* 网格容器 */
+.grids-container {
+    display: flex;
+    gap: 80px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 50px;
+}
+
+.grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.grid::before {
+    content: '输入层';
+    position: absolute;
+    top: -30px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: #7f8c8d;
+    font-size: 14px;
+}
+
+.number-grid::before {
+    content: '权重';
+    position: absolute;
+    top: -30px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: #7f8c8d;
+    font-size: 14px;
+}
+
+/* 添加列之间的连接线 */
+.number-grid::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -40px;
+    width: 20px;
+    height: 2px;
+    background-color: #7f8c8d;
+    transform: translateY(-50%);
+}
+
+.grid-item {
+    position: relative;
+    aspect-ratio: 1;
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+    min-width: 60px;
+    min-height: 60px;
+}
+
+.grid-item:active {
+    transform: scale(0.95);
+}
+
+/* 隐藏原始的复选框 */
+.grid-item input[type="checkbox"] {
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/* 创建灯泡效果 */
+.grid-item::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 70%;
+    background-color: #333;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    z-index: 1;
+}
+
+/* 被选中时的发光效果 - 使用:has选择器 */
+.grid-item:has(input[type="checkbox"]:checked)::before {
+    background-color: #ffeb3b;
+    box-shadow: 0 0 15px #ffeb3b, 0 0 30px #ffeb3b;
+}
+
+/* 悬停效果 */
+.grid-item:hover::before {
+    background-color: #444;
+}
+
+/* 数字网格样式 */
+.number-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 500px;
+    position: relative;
+}
+
+.number-grid-item {
+    position: relative;
+    aspect-ratio: 1;
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    overflow: visible;
+    min-width: 60px;
+    min-height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.number-grid-item:hover {
+    background-color: #2a2a2a;
+    box-shadow: 0 0 10px rgba(255, 235, 59, 0.3);
+}
+
+/* 数字显示 */
+.number {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    z-index: 3;
+    position: relative;
+}
+
+/* 滑块容器 - 默认隐藏 */
+.slider-container {
+    position: absolute;
+    top: -120px;
+    left: 80%;
+    width: 50px;
+    height: 300px;
+    background-color: rgba(30, 30, 30, 0.95);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 4;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+    margin-left: 15px;
+    border: 1px solid #333;
+}
+
+/* 添加连接箭头 */
+.slider-container::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 10px solid rgba(30, 30, 30, 0.95);
+}
+
+/* 悬停时显示滑块 */
+.number-grid-item:hover .slider-container {
+    display: flex;
+}
+
+/* 垂直滑块样式 */
+.slider {
+    display: flex;
+    flex-direction: column;
+    height: 90%;
+    width: 80%;
+    padding: 10px 5px;
+    justify-content: space-between;
+}
+
+.slider label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    height: calc(100% / 11);
+    padding: 2px 0;
+}
+
+.slider label span {
+    margin-left: 5px;
+    font-size: 10px;
+    color: white;
+}
+
+/* 自定义复选框样式 */
+.slider input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background-color: #333;
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+}
+
+.slider input[type="radio"]:checked {
+    background-color: #ffeb3b;
+    box-shadow: 0 0 5px #ffeb3b;
+}
+
+/* 显示只有一个复选框可以选中 */
+.slider:has(input[type="radio"]:checked) input[type="radio"]:not(:checked) {
+    opacity: 0.5;
+}
+
+/* 滑块悬停效果 */
+.slider label:hover input[type="radio"] {
+    background-color: #555;
+}
+
+/* 滑块连接线 */
+.slider::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 15px;
+    height: calc(100% - 30px);
+    width: 2px;
+    background-color: #444;
+    z-index: 1;
+}
+
+.slider input[type="radio"] {
+    z-index: 2;
+}
+
+/* 根据选中的复选框更新数字显示 */
+.number-grid-item:has(input[value="5"]:checked) .number::before {
+    content: "5";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1a1a1a;
+    color: #4caf50;
+    font-weight: bold;
+}
+
+.number-grid-item:has(input[value="4"]:checked) .number::before {
+    content: "4";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1a1a1a;
+    color: #8bc34a;
+    font-weight: bold;
+}
+
+.number-grid-item:has(input[value="3"]:checked) .number::before {
+    content: "3";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1a1a1a;
+    color: #cddc39;
+    font-weight: bold;
+}
+
+.number-grid-item:has(input[value="2"]:checked) .number::before {
+    content: "2";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1a1a1a;
+    color: #ffeb3b;
+    font-weight: bold;
+}
+
+.number-grid-item:has(input[value="1"]:checked) .number::before {
+    content: "1";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1a1a1a;
+    color: #ffc107;
+    font-weight: bold;
+}
+
+.number-grid-item:has(input[value="-1"]:checked) .number::before {
+    content: "-1";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1a1a1a;
+    color: #ff9800;
+    font-weight: bold;
+}
+
+.number-grid-item:has(input[value="-2"]:checked) .number::before {
+    content: "-2";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1a1a1a;
+    color: #ff5722;
+    font-weight: bold;
+}
+
+.number-grid-item:has(input[value="-3"]:checked) .number::before {
+    content: "-3";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1a1a1a;
+    color: #f44336;
+    font-weight: bold;
+}
+
+.number-grid-item:has(input[value="-4"]:checked) .number::before {
+    content: "-4";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1a1a1a;
+    color: #e91e63;
+    font-weight: bold;
+}
+
+.number-grid-item:has(input[value="-5"]:checked) .number::before {
+    content: "-5";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1a1a1a;
+    color: #9c27b0;
+    font-weight: bold;
+}
+
+/* 当选中0时不显示伪元素 */
+.number-grid-item:has(input[value="0"]:checked) .number::before {
+    content: none;
+}
+
+/* 结果列样式 */
+.result-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 60px;
+    position: relative;
+}
+
+.result-item {
+    width: 60px;
+    height: 60px;
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.result-item:hover {
+    background-color: #2a2a2a;
+    transform: scale(1.05);
+}
+
+/* 结果值样式 */
+.result-value {
+    color: #ecf0f1;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+/* 不同结果的颜色 */
+.result-item:nth-child(1) .result-value {
+    color: #4caf50;
+}
+
+.result-item:nth-child(2) .result-value {
+    color: #8bc34a;
+}
+
+.result-item:nth-child(3) .result-value {
+    color: #cddc39;
+}
+
+.result-item:nth-child(4) .result-value {
+    color: #ffeb3b;
+}
+
+.result-item:nth-child(5) .result-value {
+    color: #ffc107;
+}
+
+.result-item:nth-child(7) .result-value {
+    color: #ff9800;
+}
+
+.result-item:nth-child(8) .result-value {
+    color: #ff5722;
+}
+
+.result-item:nth-child(9) .result-value {
+    color: #f44336;
+}
+
+.result-item:nth-child(10) .result-value {
+    color: #e91e63;
+}
+
+.result-item:nth-child(11) .result-value {
+    color: #9c27b0;
+}
+
+/* 特殊结果样式 */
+.special-result {
+    background-color: #2c3e50;
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
+    border: 2px solid #3498db;
+    transform: scale(1.1);
+    z-index: 2;
+    position: relative;
+    overflow: hidden;
+}
+
+.special-result:hover {
+    box-shadow: 0 0 20px rgba(52, 152, 219, 0.8);
+    transform: scale(1.15);
+}
+
+.special-result::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle, rgba(52, 152, 219, 0.2) 0%, rgba(44, 62, 80, 0) 70%);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 0.5;
+    }
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    position: absolute;
+    bottom: -100px;
+}
+
+.button-container button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+/* 感知器神经网络模型的CSS实现 - 最终版 */
+
+/* 自定义计算属性 - 用于模拟感知器计算 */
+:root {
+    --input1: 0;
+    --input2: 0;
+    --input3: 0;
+    --input4: 0;
+    --input5: 0;
+    --input6: 0;
+    --input7: 0;
+    --input8: 0;
+    --input9: 0;
+    --input10: 0;
+    --input11: 0;
+    --input12: 0;
+    --input13: 0;
+    --input14: 0;
+    --input15: 0;
+    --input16: 0;
+    --weight1: 2;
+    --weight2: 4;
+    --weight3: 2;
+    --weight4: 2;
+    --weight5: 2;
+    --weight6: 2;
+    --weight7: 2;
+    --weight8: -2;
+    --weight9: 0;
+    --weight10: 0;
+    --weight11: 0;
+    --weight12: 0;
+    --weight13: 0;
+    --weight14: 0;
+    --weight15: 0;
+    --weight16: 0;
+    --bias: 0;
+}
+
+/* 输入节点激活状态的计算 */
+.grids-container:has(.grid-item:nth-child(1) input[type="checkbox"]:checked) { --input1: 1; }
+.grids-container:has(.grid-item:nth-child(2) input[type="checkbox"]:checked) { --input2: 1; }
+.grids-container:has(.grid-item:nth-child(3) input[type="checkbox"]:checked) { --input3: 1; }
+.grids-container:has(.grid-item:nth-child(4) input[type="checkbox"]:checked) { --input4: 1; }
+.grids-container:has(.grid-item:nth-child(5) input[type="checkbox"]:checked) { --input5: 1; }
+.grids-container:has(.grid-item:nth-child(6) input[type="checkbox"]:checked) { --input6: 1; }
+.grids-container:has(.grid-item:nth-child(7) input[type="checkbox"]:checked) { --input7: 1; }
+.grids-container:has(.grid-item:nth-child(8) input[type="checkbox"]:checked) { --input8: 1; }
+.grids-container:has(.grid-item:nth-child(9) input[type="checkbox"]:checked) { --input9: 1; }
+.grids-container:has(.grid-item:nth-child(10) input[type="checkbox"]:checked) { --input10: 1; }
+.grids-container:has(.grid-item:nth-child(11) input[type="checkbox"]:checked) { --input11: 1; }
+.grids-container:has(.grid-item:nth-child(12) input[type="checkbox"]:checked) { --input12: 1; }
+.grids-container:has(.grid-item:nth-child(13) input[type="checkbox"]:checked) { --input13: 1; }
+.grids-container:has(.grid-item:nth-child(14) input[type="checkbox"]:checked) { --input14: 1; }
+.grids-container:has(.grid-item:nth-child(15) input[type="checkbox"]:checked) { --input15: 1; }
+.grids-container:has(.grid-item:nth-child(16) input[type="checkbox"]:checked) { --input16: 1; }
+
+
+/* 权重映射 - 1 */
+.grids-container:has(.number-grid-item:nth-child(1) input[value="5"]:checked) { --weight1: 5; }
+.grids-container:has(.number-grid-item:nth-child(1) input[value="4"]:checked) { --weight1: 4; }
+.grids-container:has(.number-grid-item:nth-child(1) input[value="3"]:checked) { --weight1: 3; }
+.grids-container:has(.number-grid-item:nth-child(1) input[value="2"]:checked) { --weight1: 2; }
+.grids-container:has(.number-grid-item:nth-child(1) input[value="1"]:checked) { --weight1: 1; }
+.grids-container:has(.number-grid-item:nth-child(1) input[value="0"]:checked) { --weight1: 0; }
+.grids-container:has(.number-grid-item:nth-child(1) input[value="-1"]:checked) { --weight1: -1; }
+.grids-container:has(.number-grid-item:nth-child(1) input[value="-2"]:checked) { --weight1: -2; }
+.grids-container:has(.number-grid-item:nth-child(1) input[value="-3"]:checked) { --weight1: -3; }
+.grids-container:has(.number-grid-item:nth-child(1) input[value="-4"]:checked) { --weight1: -4; }
+.grids-container:has(.number-grid-item:nth-child(1) input[value="-5"]:checked) { --weight1: -5; }
+
+/* 权重映射 - 2 */
+.grids-container:has(.number-grid-item:nth-child(2) input[value="5"]:checked) { --weight2: 5; }
+.grids-container:has(.number-grid-item:nth-child(2) input[value="4"]:checked) { --weight2: 4; }
+.grids-container:has(.number-grid-item:nth-child(2) input[value="3"]:checked) { --weight2: 3; }
+.grids-container:has(.number-grid-item:nth-child(2) input[value="2"]:checked) { --weight2: 2; }
+.grids-container:has(.number-grid-item:nth-child(2) input[value="1"]:checked) { --weight2: 1; }
+.grids-container:has(.number-grid-item:nth-child(2) input[value="0"]:checked) { --weight2: 0; }
+.grids-container:has(.number-grid-item:nth-child(2) input[value="-1"]:checked) { --weight2: -1; }
+.grids-container:has(.number-grid-item:nth-child(2) input[value="-2"]:checked) { --weight2: -2; }
+.grids-container:has(.number-grid-item:nth-child(2) input[value="-3"]:checked) { --weight2: -3; }
+.grids-container:has(.number-grid-item:nth-child(2) input[value="-4"]:checked) { --weight2: -4; }
+.grids-container:has(.number-grid-item:nth-child(2) input[value="-5"]:checked) { --weight2: -5; }
+
+/* 权重映射 - 3 */
+.grids-container:has(.number-grid-item:nth-child(3) input[value="5"]:checked) { --weight3: 5; }
+.grids-container:has(.number-grid-item:nth-child(3) input[value="4"]:checked) { --weight3: 4; }
+.grids-container:has(.number-grid-item:nth-child(3) input[value="3"]:checked) { --weight3: 3; }
+.grids-container:has(.number-grid-item:nth-child(3) input[value="2"]:checked) { --weight3: 2; }
+.grids-container:has(.number-grid-item:nth-child(3) input[value="1"]:checked) { --weight3: 1; }
+.grids-container:has(.number-grid-item:nth-child(3) input[value="0"]:checked) { --weight3: 0; }
+.grids-container:has(.number-grid-item:nth-child(3) input[value="-1"]:checked) { --weight3: -1; }
+.grids-container:has(.number-grid-item:nth-child(3) input[value="-2"]:checked) { --weight3: -2; }
+.grids-container:has(.number-grid-item:nth-child(3) input[value="-3"]:checked) { --weight3: -3; }
+.grids-container:has(.number-grid-item:nth-child(3) input[value="-4"]:checked) { --weight3: -4; }
+.grids-container:has(.number-grid-item:nth-child(3) input[value="-5"]:checked) { --weight3: -5; }
+
+/* 权重映射 - 4 */
+.grids-container:has(.number-grid-item:nth-child(4) input[value="5"]:checked) { --weight4: 5; }
+.grids-container:has(.number-grid-item:nth-child(4) input[value="4"]:checked) { --weight4: 4; }
+.grids-container:has(.number-grid-item:nth-child(4) input[value="3"]:checked) { --weight4: 3; }
+.grids-container:has(.number-grid-item:nth-child(4) input[value="2"]:checked) { --weight4: 2; }
+.grids-container:has(.number-grid-item:nth-child(4) input[value="1"]:checked) { --weight4: 1; }
+.grids-container:has(.number-grid-item:nth-child(4) input[value="0"]:checked) { --weight4: 0; }
+.grids-container:has(.number-grid-item:nth-child(4) input[value="-1"]:checked) { --weight4: -1; }
+.grids-container:has(.number-grid-item:nth-child(4) input[value="-2"]:checked) { --weight4: -2; }
+.grids-container:has(.number-grid-item:nth-child(4) input[value="-3"]:checked) { --weight4: -3; }
+.grids-container:has(.number-grid-item:nth-child(4) input[value="-4"]:checked) { --weight4: -4; }
+.grids-container:has(.number-grid-item:nth-child(4) input[value="-5"]:checked) { --weight4: -5; }
+
+/* 权重映射 - 5 */
+.grids-container:has(.number-grid-item:nth-child(5) input[value="5"]:checked) { --weight5: 5; }
+.grids-container:has(.number-grid-item:nth-child(5) input[value="4"]:checked) { --weight5: 4; }
+.grids-container:has(.number-grid-item:nth-child(5) input[value="3"]:checked) { --weight5: 3; }
+.grids-container:has(.number-grid-item:nth-child(5) input[value="2"]:checked) { --weight5: 2; }
+.grids-container:has(.number-grid-item:nth-child(5) input[value="1"]:checked) { --weight5: 1; }
+.grids-container:has(.number-grid-item:nth-child(5) input[value="0"]:checked) { --weight5: 0; }
+.grids-container:has(.number-grid-item:nth-child(5) input[value="-1"]:checked) { --weight5: -1; }
+.grids-container:has(.number-grid-item:nth-child(5) input[value="-2"]:checked) { --weight5: -2; }
+.grids-container:has(.number-grid-item:nth-child(5) input[value="-3"]:checked) { --weight5: -3; }
+.grids-container:has(.number-grid-item:nth-child(5) input[value="-4"]:checked) { --weight5: -4; }
+.grids-container:has(.number-grid-item:nth-child(5) input[value="-5"]:checked) { --weight5: -5; }
+
+/* 权重映射 - 6 */
+.grids-container:has(.number-grid-item:nth-child(6) input[value="5"]:checked) { --weight6: 5; }
+.grids-container:has(.number-grid-item:nth-child(6) input[value="4"]:checked) { --weight6: 4; }
+.grids-container:has(.number-grid-item:nth-child(6) input[value="3"]:checked) { --weight6: 3; }
+.grids-container:has(.number-grid-item:nth-child(6) input[value="2"]:checked) { --weight6: 2; }
+.grids-container:has(.number-grid-item:nth-child(6) input[value="1"]:checked) { --weight6: 1; }
+.grids-container:has(.number-grid-item:nth-child(6) input[value="0"]:checked) { --weight6: 0; }
+.grids-container:has(.number-grid-item:nth-child(6) input[value="-1"]:checked) { --weight6: -1; }
+.grids-container:has(.number-grid-item:nth-child(6) input[value="-2"]:checked) { --weight6: -2; }
+.grids-container:has(.number-grid-item:nth-child(6) input[value="-3"]:checked) { --weight6: -3; }
+.grids-container:has(.number-grid-item:nth-child(6) input[value="-4"]:checked) { --weight6: -4; }
+.grids-container:has(.number-grid-item:nth-child(6) input[value="-5"]:checked) { --weight6: -5; }
+
+/* 权重映射 - 7 */
+.grids-container:has(.number-grid-item:nth-child(7) input[value="5"]:checked) { --weight7: 5; }
+.grids-container:has(.number-grid-item:nth-child(7) input[value="4"]:checked) { --weight7: 4; }
+.grids-container:has(.number-grid-item:nth-child(7) input[value="3"]:checked) { --weight7: 3; }
+.grids-container:has(.number-grid-item:nth-child(7) input[value="2"]:checked) { --weight7: 2; }
+.grids-container:has(.number-grid-item:nth-child(7) input[value="1"]:checked) { --weight7: 1; }
+.grids-container:has(.number-grid-item:nth-child(7) input[value="0"]:checked) { --weight7: 0; }
+.grids-container:has(.number-grid-item:nth-child(7) input[value="-1"]:checked) { --weight7: -1; }
+.grids-container:has(.number-grid-item:nth-child(7) input[value="-2"]:checked) { --weight7: -2; }
+.grids-container:has(.number-grid-item:nth-child(7) input[value="-3"]:checked) { --weight7: -3; }
+.grids-container:has(.number-grid-item:nth-child(7) input[value="-4"]:checked) { --weight7: -4; }
+.grids-container:has(.number-grid-item:nth-child(7) input[value="-5"]:checked) { --weight7: -5; }
+
+/* 权重映射 - 8 */
+.grids-container:has(.number-grid-item:nth-child(8) input[value="5"]:checked) { --weight8: 5; }
+.grids-container:has(.number-grid-item:nth-child(8) input[value="4"]:checked) { --weight8: 4; }
+.grids-container:has(.number-grid-item:nth-child(8) input[value="3"]:checked) { --weight8: 3; }
+.grids-container:has(.number-grid-item:nth-child(8) input[value="2"]:checked) { --weight8: 2; }
+.grids-container:has(.number-grid-item:nth-child(8) input[value="1"]:checked) { --weight8: 1; }
+.grids-container:has(.number-grid-item:nth-child(8) input[value="0"]:checked) { --weight8: 0; }
+.grids-container:has(.number-grid-item:nth-child(8) input[value="-1"]:checked) { --weight8: -1; }
+.grids-container:has(.number-grid-item:nth-child(8) input[value="-2"]:checked) { --weight8: -2; }
+.grids-container:has(.number-grid-item:nth-child(8) input[value="-3"]:checked) { --weight8: -3; }
+.grids-container:has(.number-grid-item:nth-child(8) input[value="-4"]:checked) { --weight8: -4; }
+.grids-container:has(.number-grid-item:nth-child(8) input[value="-5"]:checked) { --weight8: -5; }
+
+/* 权重映射 - 9 */
+.grids-container:has(.number-grid-item:nth-child(9) input[value="5"]:checked) { --weight9: 5; }
+.grids-container:has(.number-grid-item:nth-child(9) input[value="4"]:checked) { --weight9: 4; }
+.grids-container:has(.number-grid-item:nth-child(9) input[value="3"]:checked) { --weight9: 3; }
+.grids-container:has(.number-grid-item:nth-child(9) input[value="2"]:checked) { --weight9: 2; }
+.grids-container:has(.number-grid-item:nth-child(9) input[value="1"]:checked) { --weight9: 1; }
+.grids-container:has(.number-grid-item:nth-child(9) input[value="0"]:checked) { --weight9: 0; }
+.grids-container:has(.number-grid-item:nth-child(9) input[value="-1"]:checked) { --weight9: -1; }
+.grids-container:has(.number-grid-item:nth-child(9) input[value="-2"]:checked) { --weight9: -2; }
+.grids-container:has(.number-grid-item:nth-child(9) input[value="-3"]:checked) { --weight9: -3; }
+.grids-container:has(.number-grid-item:nth-child(9) input[value="-4"]:checked) { --weight9: -4; }
+.grids-container:has(.number-grid-item:nth-child(9) input[value="-5"]:checked) { --weight9: -5; }
+
+/* 权重映射 - 10 */
+.grids-container:has(.number-grid-item:nth-child(10) input[value="5"]:checked) { --weight10: 5; }
+.grids-container:has(.number-grid-item:nth-child(10) input[value="4"]:checked) { --weight10: 4; }
+.grids-container:has(.number-grid-item:nth-child(10) input[value="3"]:checked) { --weight10: 3; }
+.grids-container:has(.number-grid-item:nth-child(10) input[value="2"]:checked) { --weight10: 2; }
+.grids-container:has(.number-grid-item:nth-child(10) input[value="1"]:checked) { --weight10: 1; }
+.grids-container:has(.number-grid-item:nth-child(10) input[value="0"]:checked) { --weight10: 0; }
+.grids-container:has(.number-grid-item:nth-child(10) input[value="-1"]:checked) { --weight10: -1; }
+.grids-container:has(.number-grid-item:nth-child(10) input[value="-2"]:checked) { --weight10: -2; }
+.grids-container:has(.number-grid-item:nth-child(10) input[value="-3"]:checked) { --weight10: -3; }
+.grids-container:has(.number-grid-item:nth-child(10) input[value="-4"]:checked) { --weight10: -4; }
+.grids-container:has(.number-grid-item:nth-child(10) input[value="-5"]:checked) { --weight10: -5; }
+
+/* 权重映射 - 11 */
+.grids-container:has(.number-grid-item:nth-child(11) input[value="5"]:checked) { --weight11: 5; }
+.grids-container:has(.number-grid-item:nth-child(11) input[value="4"]:checked) { --weight11: 4; }
+.grids-container:has(.number-grid-item:nth-child(11) input[value="3"]:checked) { --weight11: 3; }
+.grids-container:has(.number-grid-item:nth-child(11) input[value="2"]:checked) { --weight11: 2; }
+.grids-container:has(.number-grid-item:nth-child(11) input[value="1"]:checked) { --weight11: 1; }
+.grids-container:has(.number-grid-item:nth-child(11) input[value="0"]:checked) { --weight11: 0; }
+.grids-container:has(.number-grid-item:nth-child(11) input[value="-1"]:checked) { --weight11: -1; }
+.grids-container:has(.number-grid-item:nth-child(11) input[value="-2"]:checked) { --weight11: -2; }
+.grids-container:has(.number-grid-item:nth-child(11) input[value="-3"]:checked) { --weight11: -3; }
+.grids-container:has(.number-grid-item:nth-child(11) input[value="-4"]:checked) { --weight11: -4; }
+.grids-container:has(.number-grid-item:nth-child(11) input[value="-5"]:checked) { --weight11: -5; }
+
+/* 权重映射 - 12 */
+.grids-container:has(.number-grid-item:nth-child(12) input[value="5"]:checked) { --weight12: 5; }
+.grids-container:has(.number-grid-item:nth-child(12) input[value="4"]:checked) { --weight12: 4; }
+.grids-container:has(.number-grid-item:nth-child(12) input[value="3"]:checked) { --weight12: 3; }
+.grids-container:has(.number-grid-item:nth-child(12) input[value="2"]:checked) { --weight12: 2; }
+.grids-container:has(.number-grid-item:nth-child(12) input[value="1"]:checked) { --weight12: 1; }
+.grids-container:has(.number-grid-item:nth-child(12) input[value="0"]:checked) { --weight12: 0; }
+.grids-container:has(.number-grid-item:nth-child(12) input[value="-1"]:checked) { --weight12: -1; }
+.grids-container:has(.number-grid-item:nth-child(12) input[value="-2"]:checked) { --weight12: -2; }
+.grids-container:has(.number-grid-item:nth-child(12) input[value="-3"]:checked) { --weight12: -3; }
+.grids-container:has(.number-grid-item:nth-child(12) input[value="-4"]:checked) { --weight12: -4; }
+.grids-container:has(.number-grid-item:nth-child(12) input[value="-5"]:checked) { --weight12: -5; }
+
+/* 权重映射 - 13 */
+.grids-container:has(.number-grid-item:nth-child(13) input[value="5"]:checked) { --weight13: 5; }
+.grids-container:has(.number-grid-item:nth-child(13) input[value="4"]:checked) { --weight13: 4; }
+.grids-container:has(.number-grid-item:nth-child(13) input[value="3"]:checked) { --weight13: 3; }
+.grids-container:has(.number-grid-item:nth-child(13) input[value="2"]:checked) { --weight13: 2; }
+.grids-container:has(.number-grid-item:nth-child(13) input[value="1"]:checked) { --weight13: 1; }
+.grids-container:has(.number-grid-item:nth-child(13) input[value="0"]:checked) { --weight13: 0; }
+.grids-container:has(.number-grid-item:nth-child(13) input[value="-1"]:checked) { --weight13: -1; }
+.grids-container:has(.number-grid-item:nth-child(13) input[value="-2"]:checked) { --weight13: -2; }
+.grids-container:has(.number-grid-item:nth-child(13) input[value="-3"]:checked) { --weight13: -3; }
+.grids-container:has(.number-grid-item:nth-child(13) input[value="-4"]:checked) { --weight13: -4; }
+.grids-container:has(.number-grid-item:nth-child(13) input[value="-5"]:checked) { --weight13: -5; }
+
+/* 权重映射 - 14 */
+.grids-container:has(.number-grid-item:nth-child(14) input[value="5"]:checked) { --weight14: 5; }
+.grids-container:has(.number-grid-item:nth-child(14) input[value="4"]:checked) { --weight14: 4; }
+.grids-container:has(.number-grid-item:nth-child(14) input[value="3"]:checked) { --weight14: 3; }
+.grids-container:has(.number-grid-item:nth-child(14) input[value="2"]:checked) { --weight14: 2; }
+.grids-container:has(.number-grid-item:nth-child(14) input[value="1"]:checked) { --weight14: 1; }
+.grids-container:has(.number-grid-item:nth-child(14) input[value="0"]:checked) { --weight14: 0; }
+.grids-container:has(.number-grid-item:nth-child(14) input[value="-1"]:checked) { --weight14: -1; }
+.grids-container:has(.number-grid-item:nth-child(14) input[value="-2"]:checked) { --weight14: -2; }
+.grids-container:has(.number-grid-item:nth-child(14) input[value="-3"]:checked) { --weight14: -3; }
+.grids-container:has(.number-grid-item:nth-child(14) input[value="-4"]:checked) { --weight14: -4; }
+.grids-container:has(.number-grid-item:nth-child(14) input[value="-5"]:checked) { --weight14: -5; }
+
+/* 权重映射 - 15 */
+.grids-container:has(.number-grid-item:nth-child(15) input[value="5"]:checked) { --weight15: 5; }
+.grids-container:has(.number-grid-item:nth-child(15) input[value="4"]:checked) { --weight15: 4; }
+.grids-container:has(.number-grid-item:nth-child(15) input[value="3"]:checked) { --weight15: 3; }
+.grids-container:has(.number-grid-item:nth-child(15) input[value="2"]:checked) { --weight15: 2; }
+.grids-container:has(.number-grid-item:nth-child(15) input[value="1"]:checked) { --weight15: 1; }
+.grids-container:has(.number-grid-item:nth-child(15) input[value="0"]:checked) { --weight15: 0; }
+.grids-container:has(.number-grid-item:nth-child(15) input[value="-1"]:checked) { --weight15: -1; }
+.grids-container:has(.number-grid-item:nth-child(15) input[value="-2"]:checked) { --weight15: -2; }
+.grids-container:has(.number-grid-item:nth-child(15) input[value="-3"]:checked) { --weight15: -3; }
+.grids-container:has(.number-grid-item:nth-child(15) input[value="-4"]:checked) { --weight15: -4; }
+.grids-container:has(.number-grid-item:nth-child(15) input[value="-5"]:checked) { --weight15: -5; }
+
+/* 权重映射 - 16 */
+.grids-container:has(.number-grid-item:nth-child(16) input[value="5"]:checked) { --weight16: 5; }
+.grids-container:has(.number-grid-item:nth-child(16) input[value="4"]:checked) { --weight16: 4; }
+.grids-container:has(.number-grid-item:nth-child(16) input[value="3"]:checked) { --weight16: 3; }
+.grids-container:has(.number-grid-item:nth-child(16) input[value="2"]:checked) { --weight16: 2; }
+.grids-container:has(.number-grid-item:nth-child(16) input[value="1"]:checked) { --weight16: 1; }
+.grids-container:has(.number-grid-item:nth-child(16) input[value="0"]:checked) { --weight16: 0; }
+.grids-container:has(.number-grid-item:nth-child(16) input[value="-1"]:checked) { --weight16: -1; }
+.grids-container:has(.number-grid-item:nth-child(16) input[value="-2"]:checked) { --weight16: -2; }
+.grids-container:has(.number-grid-item:nth-child(16) input[value="-3"]:checked) { --weight16: -3; }
+.grids-container:has(.number-grid-item:nth-child(16) input[value="-4"]:checked) { --weight16: -4; }
+.grids-container:has(.number-grid-item:nth-child(16) input[value="-5"]:checked) { --weight16: -5; }
+
+/* 基础样式 */
+.grid-item input[type="checkbox"] {
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/* 灯泡效果 */
+.grid-item::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 70%;
+    background-color: #333;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    z-index: 1;
+}
+
+/* 被选中时的发光效果 */
+.grid-item:has(input[type="checkbox"]:checked)::before {
+    background-color: #ffeb3b;
+    box-shadow: 0 0 15px #ffeb3b, 0 0 30px #ffeb3b;
+    animation: pulse-input 1.5s infinite;
+}
+
+/* 悬停效果 */
+.grid-item:hover::before {
+    background-color: #444;
+}
+
+/* 输入激活时的动画效果 */
+@keyframes pulse-input {
+    0% { box-shadow: 0 0 0 0 rgba(255, 235, 59, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 235, 59, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 235, 59, 0); }
+}
+
+/* 权重值显示样式 */
+.number-grid-item:has(input:checked) .number::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1a1a1a;
+    font-weight: bold;
+}
+
+/* 权重值的颜色表示 */
+.number-grid-item:has(input[value="5"]:checked) .number::before { content: "5"; color: #4caf50; }
+.number-grid-item:has(input[value="4"]:checked) .number::before { content: "4"; color: #8bc34a; }
+.number-grid-item:has(input[value="3"]:checked) .number::before { content: "3"; color: #cddc39; }
+.number-grid-item:has(input[value="2"]:checked) .number::before { content: "2"; color: #ffeb3b; }
+.number-grid-item:has(input[value="1"]:checked) .number::before { content: "1"; color: #ffc107; }
+.number-grid-item:has(input[value="0"]:checked) .number::before { content: "0"; color: #9e9e9e; }
+.number-grid-item:has(input[value="-1"]:checked) .number::before { content: "-1"; color: #ff9800; }
+.number-grid-item:has(input[value="-2"]:checked) .number::before { content: "-2"; color: #ff5722; }
+.number-grid-item:has(input[value="-3"]:checked) .number::before { content: "-3"; color: #f44336; }
+.number-grid-item:has(input[value="-4"]:checked) .number::before { content: "-4"; color: #e91e63; }
+.number-grid-item:has(input[value="-5"]:checked) .number::before { content: "-5"; color: #9c27b0; }
+
+/* 结果列样式 */
+.result-column {
+    width: 50px;
+    height: 150px;
+    overflow: hidden;
+    position: relative;
+    font-size: 24px;
+    line-height: 40px;
+}
+
+/* 顶部渐变蒙层 */
+.result-column::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
+    z-index: 1;
+}
+
+/* 底部渐变蒙层 */
+.result-column::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
+    z-index: 1;
+}
+
+.result-values {
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    transform: translateY(calc(var(--weighted-sum) * 50px - 50px * 99));
+}
+
+.result-item {
+    width: 80%;
+    height: 80%;
+    margin: 10% auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #4caf50;
+}
+
+.result-item:nth-child(101) {
+    background-color: #ffeb3b;
+}
+
+.result-item:nth-child(101) ~ .result-item {
+    background-color: #f44336;
+}
+
+/* 重构感知机计算逻辑，使用CSS变量和calc函数 */
+.grids-container {
+    /* 计算加权和 */
+    --weighted-sum: calc(
+        (var(--input1) * var(--weight1)) +
+        (var(--input2) * var(--weight2)) +
+        (var(--input3) * var(--weight3)) +
+        (var(--input4) * var(--weight4)) +
+        (var(--input5) * var(--weight5)) +
+        (var(--input6) * var(--weight6)) +
+        (var(--input7) * var(--weight7)) +
+        (var(--input8) * var(--weight8)) +
+        (var(--input9) * var(--weight9)) +
+        (var(--input10) * var(--weight10)) +
+        (var(--input11) * var(--weight11)) +
+        (var(--input12) * var(--weight12)) +
+        (var(--input13) * var(--weight13)) +
+        (var(--input14) * var(--weight14)) +
+        (var(--input15) * var(--weight15)) +
+        (var(--input16) * var(--weight16)) +
+        var(--bias)
+    );
+}
+
+/* 偏置值控制 */
+.bias-control:has(input[value="-5"]:checked) ~ .grids-container { --bias: -5; }
+.bias-control:has(input[value="-4"]:checked) ~ .grids-container { --bias: -4; }
+.bias-control:has(input[value="-3"]:checked) ~ .grids-container { --bias: -3; }
+.bias-control:has(input[value="-2"]:checked) ~ .grids-container { --bias: -2; }
+.bias-control:has(input[value="-1"]:checked) ~ .grids-container { --bias: -1; }
+.bias-control:has(input[value="0"]:checked) ~ .grids-container { --bias: 0; }
+.bias-control:has(input[value="1"]:checked) ~ .grids-container { --bias: 1; }
+.bias-control:has(input[value="2"]:checked) ~ .grids-container { --bias: 2; }
+.bias-control:has(input[value="3"]:checked) ~ .grids-container { --bias: 3; }
+.bias-control:has(input[value="4"]:checked) ~ .grids-container { --bias: 4; }
+.bias-control:has(input[value="5"]:checked) ~ .grids-container { --bias: 5; }
+
+/* 偏置值控制样式 */
+.bias-control {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.bias-control h3 {
+    color: #ecf0f1;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.bias-slider {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #2c3e50;
+    border-radius: 5px;
+}
+
+.bias-slider label {
+    margin: 0 10px;
+    cursor: pointer;
+    position: relative;
+}
+
+.bias-slider input[type="radio"] {
+    opacity: 0;
+    position: absolute;
+}
+
+.bias-slider span {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 50%;
+    background-color: #333;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.bias-slider input:checked + span {
+    transform: scale(1.2);
+    box-shadow: 0 0 10px #ffeb3b;
+}
+
+.bias-description {
+    margin-top: 10px;
+    color: #bdc3c7;
+    font-size: 14px;
+}
