@@ -567,22 +567,22 @@ h1 {
 
 /* 自定义计算属性 - 用于模拟感知器计算 */
 :root {
-    --input1: 0;
-    --input2: 0;
-    --input3: 0;
-    --input4: 0;
-    --input5: 0;
-    --input6: 0;
-    --input7: 0;
-    --input8: 0;
-    --input9: 0;
-    --input10: 0;
-    --input11: 0;
-    --input12: 0;
-    --input13: 0;
-    --input14: 0;
-    --input15: 0;
-    --input16: 0;
+    --input1: -1;
+    --input2: -1;
+    --input3: -1;
+    --input4: -1;
+    --input5: -1;
+    --input6: -1;
+    --input7: -1;
+    --input8: -1;
+    --input9: -1;
+    --input10: -1;
+    --input11: -1;
+    --input12: -1;
+    --input13: -1;
+    --input14: -1;
+    --input15: -1;
+    --input16: -1;
     --weight1: 0;
     --weight2: 0;
     --weight3: 0;
